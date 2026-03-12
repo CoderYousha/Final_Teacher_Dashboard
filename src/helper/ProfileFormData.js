@@ -5,7 +5,12 @@ export function buildProfileFormData({
      phoneNumber,
      birthDate,
      email,
-     language
+     language,
+     image,
+     specialization,
+     academicDegree,
+     experienceYears,
+     major,
 }) {
      const formData = new FormData();
 
@@ -15,6 +20,12 @@ export function buildProfileFormData({
      formData.append('phone', phoneNumber);
      formData.append('email', email);
      formData.append('language', language);
+     formData.append('specialization_id', specialization);
+     formData.append('academic_degree_id', academicDegree);
+     formData.append('experience_years', experienceYears);
+     formData.append('major_id', major);
+     if (image)
+          formData.append('image', image);
      if (birthDate)
           formData.append('birth_date', birthDate);
      return formData;

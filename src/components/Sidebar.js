@@ -21,11 +21,11 @@ function Sidebar() {
                'icon': <DashboardOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
                'link': '../dashboard'
           },
-          {
-               'title': <FormattedMessage id="notifications" />,
-               'icon': <NotificationsNoneOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
-               'link': '../notifications',
-          },
+          // {
+          //      'title': <FormattedMessage id="notifications" />,
+          //      'icon': <NotificationsNoneOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
+          //      'link': '../notifications',
+          // },
           {
                'title': <FormattedMessage id="courses" />,
                'icon': <CastForEducationOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,

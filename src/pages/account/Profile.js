@@ -268,7 +268,7 @@ function Profile() {
 
                         {/* Update Profile Popup */}
                         <Box id="update" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <UpdateProfile onClickCancel={() => setPopup('update', 'none')} setSnackBar={setSnackBar} />
+                            <UpdateProfile onClickClose={() => setPopup('update', 'none')} setSnackBar={setSnackBar} />
                         </Box>
 
                         {/* Update Password Popup */}

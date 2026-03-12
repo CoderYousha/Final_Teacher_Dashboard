@@ -7,8 +7,14 @@ export function useUpdateProfile() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [image, setImage] = useState('');
     const [birthDate, setBirthDate] = useState('');
+    const [specialization, setSpecialization] = useState('');
+    const [academicDegree, setAcademicDegree] = useState('');
+    const [experienceYears, setExperienceYears] = useState('');
+    const [major, setMajor] = useState('');
 
     return {
-        firstName, setFirstName, lastName, setLastName, code, setCode, phoneNumber, setPhoneNumber, image, setImage, birthDate, setBirthDate
+        firstName, setFirstName, lastName, setLastName, code, setCode, phoneNumber, setPhoneNumber, image, setImage, birthDate, setBirthDate,
+        specialization, setSpecialization, academicDegree, setAcademicDegree, experienceYears, setExperienceYears, major,
+        setMajor,
     };
 }

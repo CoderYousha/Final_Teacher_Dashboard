@@ -59,7 +59,7 @@ function Header({ isFullWidth = false }) {
                          <Box sx={{ backgroundColor: theme.palette.background.paper, width: isFullWidth && '100% !important', float: language === 'en' && "right" }} className="flex justify-between items-center px-2 py-3 !w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir={language === 'en' ? 'ltr' : 'rtl'}>
                               <Typography variant="h4" className="font-bold pr-5 max-sm:!text-lg max-sm:!ml-3"><FormattedMessage id="teacher_control_panel" /></Typography>
                               <Box className="flex items-center w-1/5" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
-                                   <NotificationsNoneOutlinedIcon onClick={() => openNotification()} src={NotificationImage} alt="notification" className="w-6 h-6 cursor-pointer max-sm:ml-3" />
+                                   {/* <NotificationsNoneOutlinedIcon onClick={() => openNotification()} src={NotificationImage} alt="notification" className="w-6 h-6 cursor-pointer max-sm:ml-3" /> */}
                                    {
                                         theme.palette.mode == 'dark' ?
                                              <SunnyIcon onClick={colorMode.toggleColorMode} fontSize="medium" className="cursor-pointer mx-3 max-sm:ml-3" />
