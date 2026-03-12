@@ -85,7 +85,7 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
         setAcademicDegree(profile.academic_degree?.id);
         setAcademicDegreeValue({ value: profile.academic_degree?.id, label: language === 'en' ? profile.academic_degree?.name_en : profile.academic_degree?.name_ar });
         setExperienceYears(profile.experience_years);
-        setBirthDate('2025-01-01');
+        setBirthDate(profile.birth_date.split(' ')[0]);
         setPhoneNumber(profile.phone);
         setCode(profile.phone_code);
         setMajor(profile.major?.id);
@@ -149,7 +149,6 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                         additional={{
                             page: 1
                         }}
-                        className="mt-2 !bg-gray-200"
                         placeholder={<FormattedMessage id='specialization' />}
                         styles={{
                             option: (provided, state) => ({
@@ -158,11 +157,12 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                             }),
                         }}
                         isSearchable={false}
+                        className="mt-2 !bg-gray-200 z-[600]"
                     />
                 </Box>
 
                 {/* Specialization Async Pagination */}
-                <Box className="">
+                {/* <Box className="">
                     <Typography variant="body1"><FormattedMessage id='education_specialization' /></Typography>
                     <AsyncPaginate
                         value={majorValue}
@@ -171,7 +171,7 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                         additional={{
                             page: 1
                         }}
-                        className="mt-2 !bg-gray-200"
+                        className="mt-2 !bg-gray-200 z-50"
                         placeholder={<FormattedMessage id='education_specialization' />}
                         styles={{
                             option: (provided, state) => ({
@@ -180,12 +180,11 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                             }),
                         }}
                         isSearchable={false}
-                        className="z-50"
                     />
-                </Box>
+                </Box> */}
 
                 {/* Education Specialization & Academic Degree Async Pagination */}
-                <Box className="">
+                <Box className="col-span-2">
                     <Typography variant="body1"><FormattedMessage id='academic_degree' /></Typography>
                     <AsyncPaginate
                         value={academicDegreeValue}
@@ -194,7 +193,7 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                         additional={{
                             page: 1
                         }}
-                        className="mt-2 !bg-gray-200"
+                        className="mt-2 !bg-gray-200 z-50"
                         placeholder={<FormattedMessage id='academic_degree' />}
                         styles={{
                             option: (provided, state) => ({
@@ -203,7 +202,6 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                             }),
                         }}
                         isSearchable={false}
-                        className="z-50"
                     />
                 </Box>
 

@@ -328,7 +328,7 @@ function Translation() {
             all: "الكل",
             teachers: "المدرسون",
             search_teachers: "البحث باسم المدرس أو البريد الإلكتروني",
-            academic_degree: "الدرجة العملية",
+            academic_degree: "الدرجة العلمية",
             phone: "الرقم",
             total_teachers: "إجمالي المدرسين",
             add_teacher: "إضافة مدرس جديد",
