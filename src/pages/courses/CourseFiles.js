@@ -4,8 +4,8 @@ import AuthContext from "../../context/AuthContext";
 import useSnackBar from "../../hooks/UseSnackBar";
 import { useWaits } from "../../hooks/UseWait";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
-import { useNavigate, useParams } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
+import { useParams } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
@@ -16,25 +16,23 @@ import AddFile from "../../popup/AddFile";
 import UpdateFile from "../../popup/UpdateFile";
 import DeleteDialog from "../../popup/DeleteDialog";
 import VideoPreview from "../../popup/VideoPreview";
+import { usePagination } from "../../popup/UsePagination";
 
 function CourseFiles() {
-    const { host, language } = useConstants();
-    const { wait, profile } = useContext(AuthContext);
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const theme = useTheme();
+    const param = useParams();
+    const { wait } = useContext(AuthContext);
     const { setPopup } = usePopups();
+    const { host, language } = useConstants();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait } = useWaits();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const [filesCounts, setFilesCounts] = useState('');
     const [files, setFiles] = useState([]);
     const [file, setFile] = useState('');
-    const theme = useTheme();
-    const intl = useIntl();
-    const navigate = useNavigate();
-    const param = useParams();
 
+    {/* Get Course Files Function */ }
     const getFiles = async () => {
         let result = await Fetch(host + `/courses/${param.id}/files`);
 
@@ -47,11 +45,13 @@ function CourseFiles() {
         }
     }
 
+    {/* Get Specefic File Details */ }
     const getFileDetails = (id) => {
         const fileDetails = files.find((file) => file.id === id)
         setFile(fileDetails);
     }
 
+    {/* Delete  File Function */ }
     const deleteFile = async () => {
         let result = await Fetch(host + `/teacher/courses/files/${file.id}/delete`, 'DELETE');
 
@@ -116,7 +116,7 @@ function CourseFiles() {
                                                                 <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!flex justify-center" dir="ltr">
                                                                     <Button variant="contained" color="success" onClick={() => { getFileDetails(file.id); setPopup('update', 'flex') }}><FormattedMessage id="update" /></Button>
                                                                     <Button variant="contained" color="error" className="!mx-3" onClick={() => { getFileDetails(file.id); setPopup('delete', 'flex'); }}><FormattedMessage id="delete" /></Button>
-                                                                    <Button variant="contained" color="info" onClick={() => {getFileDetails(file.id); setPopup('preview', 'flex');}}><FormattedMessage id="video_preview" /></Button>
+                                                                    <Button variant="contained" color="info" onClick={() => { getFileDetails(file.id); setPopup('preview', 'flex'); }}><FormattedMessage id="video_preview" /></Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         )
@@ -124,6 +124,7 @@ function CourseFiles() {
                                                     </TableBody>
                                                 </Table>
 
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -140,14 +141,17 @@ function CourseFiles() {
                                         <Box id="add" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <AddFile onComplete={getFiles} onClickClose={() => setPopup('add', 'none')} />
                                         </Box>
+
                                         {/* Update File Popup */}
                                         <Box id="update" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <UpdateFile fileDetails={file} onComplete={getFiles} onClickClose={() => setPopup('update', 'none')} />
                                         </Box>
+
                                         {/* Delete Course Popup */}
                                         <Box id="delete" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} onClickConfirm={deleteFile} title={<FormattedMessage id="delete_file_title" />} subtitle={<FormattedMessage id="delete_file_description" />} />
                                         </Box>
+
                                         {/* Video Preview Popup */}
                                         <Box id="preview" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <VideoPreview onClickClose={() => setPopup('preview', 'none')} file={file} />

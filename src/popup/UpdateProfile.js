@@ -13,6 +13,7 @@ import { buildProfileFormData } from "../helper/ProfileFormData";
 import { useConstants } from "../hooks/UseConstants";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import UploadImage from '../images/icons/upload-image.png';
 
 function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
     const { host } = useConstants();
@@ -78,6 +79,7 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
     }
 
     const setValues = () => {
+        setImage('');
         setFirstName(profile.first_name);
         setLastName(profile.last_name);
         setSpecialization(profile.specialization?.id);
@@ -211,6 +213,11 @@ function UpdateProfile({ onClickClose, setSnackBar, setTeachers }) {
                 <Box dir="ltr" className="w-full h-full max-sm:h-12">
                     <PhoneInput value={code + phoneNumber} country={'us'} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode === 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode === 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
                 </Box>
+            </Box>
+            <Box className="relative w-full h-32 bg-gray-200 rounded-xl mt-5 flex flex-col items-center justify-center cursor-pointer">
+                <img src={UploadImage} className="" />
+                <Typography variant="body1" className="text-gray-700"><FormattedMessage id='add_image' /></Typography>
+                <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
 
             {/* Buttons Container */}

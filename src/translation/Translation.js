@@ -260,6 +260,8 @@ function Translation() {
             total_paths: "Total Paths",
             delete_path_title: "Delete Path",
             delete_path_description: "Are you sure that you want delete this path?",
+            confirm: "Confirm",
+            logout_description: "Are you sure that you want logout from your account?",
         },
         ar: {
             total_students: "إجمالي الطلاب",
@@ -521,6 +523,8 @@ function Translation() {
             total_paths: "إجمالي المسارات",
             delete_path_title: "حذف المسار",
             delete_path_description: "هل أنت متأكد أنك ترغب بحذف هذا المسار؟",
+            confirm: "تأكيد",
+            logout_description: "هل أنت متأكد أنك ترغب تسجيل الخروج من الحساب؟",
         }
     };
 }

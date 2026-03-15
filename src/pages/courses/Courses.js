@@ -21,6 +21,8 @@ import DeleteDialog from "../../popup/DeleteDialog";
 import AddIcon from '@mui/icons-material/Add';
 import AddCourse from "../../popup/AddCourse";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../../popup/UseSearch";
+import { usePagination } from "../../popup/UsePagination";
 
 function Courses() {
     const { host, language } = useConstants();
@@ -29,20 +31,18 @@ function Courses() {
     const { getWait, setGetWait, filterWait, setFilterWait } = useWaits();
     const { category, setCategory, categoriesValue, setCategoriesValue, path, setPath, pathsValue, setPathsValue, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate } = useCoursesFilter();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { search, setSearch, order, setOrder } = useSearch();
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const { setPopup } = usePopups();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const [coursesCounts, setCoursesCounts] = useState('');
     const [courses, setCourses] = useState([]);
     const [allMajors, setAllMajors] = useState([]);
-    const [search, setSearch] = useState('');
     const [course, setCourse] = useState('');
-    const [order, setOrder] = useState('');
     const theme = useTheme();
     const intl = useIntl();
     const navigate = useNavigate();
 
+    {/* Get Courses Function */ }
     const getCourses = async () => {
         let result = await Fetch(host + `/courses?teacher_id=${profile.id}&status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
@@ -57,6 +57,7 @@ function Courses() {
         setGetWait(false);
     }
 
+    {/* Get Majors Function */ }
     const getMajors = async () => {
         let result = await Fetch(host + '/majors', "GET", null);
 
@@ -65,18 +66,20 @@ function Courses() {
         }
     }
 
+    {/* Get Specefic Course Details */ }
     const getCourseDetails = (id, pathId, type) => {
         const courseDetails = courses.find((course) => course.id === id)
         const path = courseDetails?.paths.find((path) => path.id === pathId);
-        if(type === 'update'){
+        if (type === 'update') {
             setCourse(courseDetails);
-        }else if (!path) {
-            setCourse({"course": courseDetails});
+        } else if (!path) {
+            setCourse({ "course": courseDetails });
         } else {
             setCourse({ "course": courseDetails, "path": path });
         }
     }
 
+    {/* Filtering Courses Function */ }
     const filteringCourses = async () => {
         let result = await Fetch(host + `/courses?teacher_id=${profile.id}&status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
@@ -89,6 +92,7 @@ function Courses() {
         setFilterWait(false);
     }
 
+    {/* Delete Course Function */ }
     const deleteCourse = async () => {
         let result = await Fetch(host + `/teacher/courses/${course.id}/delete`, 'DELETE');
 
@@ -175,7 +179,7 @@ function Courses() {
                                                                             <Button variant="contained" color="error" onClick={() => { setPopup('delete', 'flex') }}><FormattedMessage id="delete" /></Button>
                                                                             {/* <Button variant="contained" color="info" onClick={(e) => { e.stopPropagation(); getCourseDetails(course.id, path.id); setPopup('details', 'flex'); }}><FormattedMessage id="view_details" /></Button> */}
                                                                             <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/files`)}><FormattedMessage id="files" /></Button>
-                                                                            <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/exams`)}><FormattedMessage id="exams"/></Button>
+                                                                            <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/exams`)}><FormattedMessage id="exams" /></Button>
                                                                         </StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )
@@ -189,7 +193,7 @@ function Courses() {
                                                                     <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!flex justify-between" dir="ltr">
                                                                         <Button variant="contained" color="success" onClick={(e) => { e.stopPropagation(); getCourseDetails(course.id, null, 'update'); setPopup('update', 'flex') }}><FormattedMessage id="update" /></Button>
                                                                         <Button variant="contained" color="error" onClick={() => { setPopup('delete', 'flex') }}><FormattedMessage id="delete" /></Button>
-                                                                        <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/files`)}><FormattedMessage id="files"/></Button>
+                                                                        <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/files`)}><FormattedMessage id="files" /></Button>
                                                                         <Button variant="contained" color="info" onClick={() => navigate(`/courses/${course.id}/exams`)}><FormattedMessage id="exams" /></Button>
                                                                     </StyledTableCell>
                                                                 </StyledTableRow>
@@ -197,6 +201,7 @@ function Courses() {
                                                     </TableBody>
                                                 </Table>
 
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -242,6 +247,8 @@ function Courses() {
                         </Box>
                     </Box>
             }
+
+            {/* Snackbar Alert */}
             <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
         </>
     );

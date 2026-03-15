@@ -4,15 +4,10 @@ import AuthContext from "../../context/AuthContext";
 import { Box, Button, CircularProgress, ListItemIcon, Menu, MenuItem, Switch, Typography, useTheme } from "@mui/material";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import StudentsImage from '../../images/icons/students.png';
-import TeachersImage from '../../images/icons/teachers.png';
-import MoneyImage from '../../images/icons/money.png';
-import ReportImage from '../../images/icons/blue_report.png';
 import ResetPasswordImage from '../../images/icons/reset-password.png';
 import LanguageImage from '../../images/icons/language.png';
 import SyImage from '../../images/flags/sy.png';
 import AuImage from '../../images/flags/au.png';
-import { useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import UpdateProfile from "../../popup/UpdateProfile";
@@ -31,25 +26,27 @@ import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import RouteOutlinedIcon from '@mui/icons-material/RouteOutlined';
 
 function Profile() {
+    const theme = useTheme();
     const { host, language } = useConstants();
+    const { setPopup } = usePopups();
     const { wait, profile, setProfile } = useContext(AuthContext);
     const { sendWait, setSendWait } = useWaits();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const { setPopup } = usePopups();
-    const theme = useTheme();
-    const navigate = useNavigate();
     const [lang, setLang] = useState(language);
 
+    {/* Open Languages Menue */}
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
+    {/* Close Languages Menue */}
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    {/* Change System Language Function */}
     const changeLanguage = async (language) => {
         setSendWait(true);
 

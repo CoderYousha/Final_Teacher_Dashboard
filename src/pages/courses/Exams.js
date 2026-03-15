@@ -15,17 +15,16 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import AddExam from "../../popup/AddExam";
 import DeleteDialog from "../../popup/DeleteDialog";
 import UpdateExam from "../../popup/UpdateExam";
+import { usePagination } from "../../popup/UsePagination";
 
 function Exams() {
     const { host, language } = useConstants();
     const { wait, profile } = useContext(AuthContext);
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait } = useWaits();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const [examsCounts, setExamsCounts] = useState('');
     const [exams, setExams] = useState([]);
     const [exam, setExam] = useState('');
@@ -33,6 +32,7 @@ function Exams() {
     const navigate = useNavigate();
     const param = useParams();
 
+    {/* Get Exams Function */ }
     const getExams = async () => {
         let result = await Fetch(host + `/courses/${param.id}/exams`);
 
@@ -45,11 +45,13 @@ function Exams() {
         }
     }
 
+    {/* Get Specefic Exam Details */ }
     const getExamDetails = (id) => {
         const examDetails = exams.find((exam) => exam.id === id)
         setExam(examDetails);
     }
 
+    {/* Delete Exam Function */ }
     const deleteExam = async () => {
         let result = await Fetch(host + `/teacher/courses/exams/${exam.id}/delete`, 'DELETE');
 
@@ -121,6 +123,7 @@ function Exams() {
                                                     </TableBody>
                                                 </Table>
 
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -137,10 +140,12 @@ function Exams() {
                                         <Box id="add" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <AddExam onComplete={getExams} onClickClose={() => setPopup('add', 'none')} />
                                         </Box>
+
                                         {/* Update File Popup */}
                                         <Box id="update" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <UpdateExam examDetails={exam} onComplete={getExams} onClickClose={() => setPopup('update', 'none')} />
                                         </Box>
+
                                         {/* Delete Course Popup */}
                                         <Box id="delete" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} onClickConfirm={deleteExam} title={<FormattedMessage id="delete_exam_title" />} subtitle={<FormattedMessage id="delete_exam_description" />} />

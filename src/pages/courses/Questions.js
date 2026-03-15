@@ -15,19 +15,19 @@ import DeleteDialog from "../../popup/DeleteDialog";
 import UpdateQuestion from "../../popup/UpdateQuestion";
 
 function Questions() {
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const param = useParams();
     const { host, language } = useConstants();
-    const { wait, profile } = useContext(AuthContext);
+    const { wait } = useContext(AuthContext);
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait } = useWaits();
-    const [questionsCounts, setQuestionsCounts] = useState('');
     const [questions, setQuestions] = useState([]);
     const [question, setQuestion] = useState('');
-    const theme = useTheme();
-    const navigate = useNavigate();
-    const param = useParams();
 
+    {/* Get Questions Function */}
     const getQuestions = async () => {
         let result = await Fetch(host + `/courses/${param.course_id}/exams/${param.exam_id}/show`);
 
@@ -37,11 +37,13 @@ function Questions() {
         }
     }
 
+    {/* Get Specefic Question Details */}
     const getQuestionDetails = (id) => {
         const questionDetails = questions.find((question) => question.id === id)
         setQuestion(questionDetails);
     }
 
+    {/* Delete Question Function */}
     const deleteQuestion = async () => {
         let result = await Fetch(host + `/teacher/courses/exams/questions/${question.id}/delete`, 'DELETE');
 
@@ -121,10 +123,12 @@ function Questions() {
                                         <Box id="add" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <AddQuestion onComplete={getQuestions} onClickClose={() => setPopup('add', 'none')} />
                                         </Box>
+
                                         {/* Update File Popup */}
                                         <Box id="update" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <UpdateQuestion questionDetails={question} onComplete={getQuestions} onClickClose={() => setPopup('update', 'none')} />
                                         </Box>
+
                                         {/* Delete Course Popup */}
                                         <Box id="delete" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} onClickConfirm={deleteQuestion} title={<FormattedMessage id="delete_question_title" />} subtitle={<FormattedMessage id="delete_question_description" />} />

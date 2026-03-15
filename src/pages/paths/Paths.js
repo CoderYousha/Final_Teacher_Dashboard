@@ -6,23 +6,19 @@ import Fetch from "../../services/Fetch";
 import SnackbarAlert from "../../components/SnackBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import CourseDetails from "../../popup/CourseDetails";
-import CoursesFilter from "../../popup/CoursesFilter";
-import { useCoursesFilter } from "../../filter/UseCoursesFilter";
 import { usePopups } from "../../hooks/UsePopups";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { useConstants } from "../../hooks/UseConstants";
 import { FormattedMessage, useIntl } from "react-intl";
-import UpdateCourse from "../../popup/UpdateCourse";
 import useSnackBar from "../../hooks/UseSnackBar";
 import DeleteDialog from "../../popup/DeleteDialog";
 import AddIcon from '@mui/icons-material/Add';
-import AddCourse from "../../popup/AddCourse";
 import { useNavigate } from "react-router-dom";
 import AddPath from "../../popup/AddPath";
 import UpdatePath from "../../popup/UpdatePath";
+import { useSearch } from "../../popup/UseSearch";
+import { usePagination } from "../../popup/UsePagination";
 
 function Paths() {
     const { host, language } = useConstants();
@@ -31,18 +27,16 @@ function Paths() {
     const { getWait, setGetWait } = useWaits();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const { search, setSearch } = useSearch();
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const [pathsCounts, setPathsCounts] = useState('');
     const [paths, setPaths] = useState([]);
-    const [search, setSearch] = useState('');
     const [path, setPath] = useState('');
-    const [order, setOrder] = useState('');
     const theme = useTheme();
     const intl = useIntl();
     const navigate = useNavigate();
 
+    {/* Get Paths Function */ }
     const getPaths = async () => {
         let result = await Fetch(host + `/paths?teacher_id=${profile.id}&page=${page + 1}&search=${search}`, 'GET', null);
 
@@ -56,11 +50,13 @@ function Paths() {
         setGetWait(false);
     }
 
+    {/* Get Specefic Path Details Function */ }
     const getPathDetails = (id) => {
         const pathDetails = paths.find((path) => path.id === id)
         setPath(pathDetails);
     }
 
+    {/* Delete Path Function */ }
     const deletePath = async () => {
         let result = await Fetch(host + `/teacher/paths/${path.id}/delete`, 'DELETE');
 
@@ -145,6 +141,7 @@ function Paths() {
                                                     </TableBody>
                                                 </Table>
 
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -176,6 +173,8 @@ function Paths() {
                         </Box>
                     </Box>
             }
+
+            {/* Snackbar Alert */}
             <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
         </>
     );

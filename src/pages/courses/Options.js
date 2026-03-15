@@ -5,20 +5,18 @@ import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import useSnackBar from "../../hooks/UseSnackBar";
 import { useWaits } from "../../hooks/UseWait";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import Fetch from "../../services/Fetch";
 import { FormattedMessage } from "react-intl";
-import AddQuestion from "../../popup/AddQuestion";
 import DeleteDialog from "../../popup/DeleteDialog";
-import UpdateQuestion from "../../popup/UpdateQuestion";
 import AddOption from "../../popup/AddOption";
 import UpdateOption from "../../popup/UpdateOption";
 
 function Options() {
     const { host, language } = useConstants();
-    const { wait, profile } = useContext(AuthContext);
+    const { wait } = useContext(AuthContext);
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
@@ -26,9 +24,9 @@ function Options() {
     const [options, setOptions] = useState([]);
     const [option, setOption] = useState('');
     const theme = useTheme();
-    const navigate = useNavigate();
     const param = useParams();
 
+    {/* Get Options Function */}
     const getOptions = async () => {
         let result = await Fetch(host + `/courses/${param.course_id}/exams/${param.exam_id}/show`);
 
@@ -42,11 +40,13 @@ function Options() {
         }
     }
 
+    {/* Get Specefic Option Details */}
     const getOptionDetails = (id) => {
         const optionDetails = options.find((option) => option.id === id)
         setOption(optionDetails);
     }
 
+    {/* Delete Option Function */}
     const deleteOption = async () => {
         let result = await Fetch(host + `/teacher/courses/exams/questions/options/${option.id}/delete`, 'DELETE');
 
@@ -123,10 +123,12 @@ function Options() {
                                         <Box id="add" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <AddOption onComplete={getOptions} onClickClose={() => setPopup('add', 'none')} />
                                         </Box>
+
                                         {/* Update File Popup */}
                                         <Box id="update" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <UpdateOption optionDetails={option} onComplete={getOptions} onClickClose={() => setPopup('update', 'none')} />
                                         </Box>
+
                                         {/* Delete Course Popup */}
                                         <Box id="delete" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} onClickConfirm={deleteOption} title={<FormattedMessage id="delete_option_title" />} subtitle={<FormattedMessage id="delete_option_description" />} />
